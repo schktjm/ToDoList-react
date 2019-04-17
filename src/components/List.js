@@ -3,6 +3,19 @@ import Card from './ListItem';
 import ItemForm from './ListItemForm';
 
 
+const divStyle = {
+    "display": "flex",
+    "flexDirection": "column",
+    "justifyContent": "center",
+    "alignItems": "center"
+};
+
+const radioLabelStyle = {
+    "margin": "5px"
+};
+
+const showMenu = ['all', 'active', 'complete'];
+
 const getId = (() => {
     let count = 0;
     const couUp = () => {
@@ -13,7 +26,6 @@ const getId = (() => {
 })();
 
 const makeItem = (text) => {
-    console.log('called');
     return {
         text: text,
         isFinish: false,
@@ -26,7 +38,6 @@ const List = () => {
     const [items, setItems] = useState([]);
     const [show, setShow] = useState('all');
 
-    const showMenu = ['all', 'active', 'complete'];
 
     const pushItems = text => {
         setItems([...items, makeItem(text)]);
@@ -39,21 +50,26 @@ const List = () => {
     };
 
     return (
-        <div>
-            {
+        <div style={divStyle}>
+            <div>{
                 showMenu.map(x => {
                     return (
-                        <label key={x}>{x}
-                            <input type="radio" name="show" key={x} value={x} onChange={() => setShow(x)}
+                        <label key={x} style={radioLabelStyle}>
+                            <input type="radio" name="show" key={x} value={x}
+                                   onChange={() => setShow(x)}
                                    checked={x === show}/>
+                            {x}
                         </label>
                     );
                 })
             }
+            </div>
             {
                 items.filter(item => ((show === 'active' && !item.isFinish) || (show === 'complete' && item.isFinish) || show === 'all'))
-                    .map(item => console.log(item) ||
-                        <Card key={item.id.toString()} item={item} handler={setCheck} delItem={delItem}/>)
+                    .map(item =>
+                        <label key={item.id.toString()}>
+                            <Card key={item.id.toString()} item={item} handler={setCheck} delItem={delItem}/>
+                        </label>)
             }
             <ItemForm handler={pushItems}/>
         </div>
