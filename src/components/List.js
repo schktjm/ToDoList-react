@@ -21,19 +21,37 @@ const makeItem = (text) => {
     }
 };
 
-const Log = v => console.log(v);
 
 const List = () => {
     const [items, setItems] = useState([]);
+    const [show, setShow] = useState('all');
+
+    const showMenu = ['all', 'active', 'complete'];
+
     const pushItems = text => {
         setItems([...items, makeItem(text)]);
     };
-    const listItems = items.map(item =>
-        <Card key={item.id.toString()} text={item.text} isFinish={item.isFinish}/>
-    );
+    const setCheck = (id, isFinish) => {
+        setItems(items.map(item => (item.id === id) ? {...item, isFinish: isFinish} : item))
+    };
+
     return (
         <div>
-            {listItems}
+            {
+                showMenu.map(x => {
+                    return (
+                        <label key={x}>{x}
+                            <input type="radio" name="show" key={x} value={x} onChange={() => setShow(x)}
+                                   checked={x === show}/>
+                        </label>
+                    );
+                })
+            }
+            {
+                items.filter(item => ((show === 'active' && !item.isFinish) || (show === 'complete' && item.isFinish) || show === 'all'))
+                    .map(item => console.log(item) ||
+                        <Card key={item.id.toString()} item={item} handler={setCheck}/>)
+            }
             <ItemForm handler={pushItems}/>
         </div>
     );

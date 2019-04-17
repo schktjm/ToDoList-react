@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 
-const ListItem = ({text, isFinish}) => {
-    const [checked, setChecked] = useState(isFinish);
+const ListItem = ({item, handler}) => {
+    const [checked, setChecked] = useState(item.isFinish);
     return (
         <div>
-            <input type="checkbox" onClick={() => setChecked(!checked)} defaultChecked={checked}/>
-            {text}
+            <input type="checkbox" onClick={() => {
+                handler(item.id, !checked);
+                setChecked(!checked);
+            }} defaultChecked={checked} checked={checked}/>
+            {item.text}
         </div>
     );
 };
