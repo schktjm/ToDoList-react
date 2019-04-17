@@ -34,6 +34,9 @@ const List = () => {
     const setCheck = (id, isFinish) => {
         setItems(items.map(item => (item.id === id) ? {...item, isFinish: isFinish} : item))
     };
+    const delItem = (id) => {
+        setItems(items.filter(item => item.id !== id))
+    };
 
     return (
         <div>
@@ -50,7 +53,7 @@ const List = () => {
             {
                 items.filter(item => ((show === 'active' && !item.isFinish) || (show === 'complete' && item.isFinish) || show === 'all'))
                     .map(item => console.log(item) ||
-                        <Card key={item.id.toString()} item={item} handler={setCheck}/>)
+                        <Card key={item.id.toString()} item={item} handler={setCheck} delItem={delItem}/>)
             }
             <ItemForm handler={pushItems}/>
         </div>
